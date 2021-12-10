@@ -24,6 +24,15 @@ function turnOffLed (num: number) {
         pins.analogWritePin(AnalogPin.P1, 0)
     }
 }
+function onButtonPressed (button: number) {
+    serial.writeLine("Pressed " + convertToText(button))
+    music.stopAllSounds()
+    music.setBuiltInSpeakerEnabled(true)
+    music.ringTone(notes[button])
+    if (button == song[songIndex]) {
+        turnOffLed(song[songIndex])
+    }
+}
 function determineButton (num: number) {
     if (num > 40 && num < 80) {
         return 7
@@ -51,6 +60,17 @@ function determineButton (num: number) {
     }
     return -1
 }
+function onButtonReleased (button: number) {
+    serial.writeLine("Released " + convertToText(button))
+    music.stopAllSounds()
+    if (button == song[songIndex]) {
+        songIndex += 1
+        if (songIndex >= song.length - 0) {
+            songIndex = 0
+        }
+        lightLed(song[songIndex])
+    }
+}
 function lightLed (num: number) {
     if (num == 0) {
         pins.analogWritePin(AnalogPin.P16, 1023)
@@ -77,9 +97,14 @@ function lightLed (num: number) {
         pins.analogWritePin(AnalogPin.P1, 1023)
     }
 }
-let prevButton = 0
 let currentButton = 0
-let notes = [
+let song: number[] = []
+let notes: number[] = []
+let songIndex = 0
+serial.writeLine("---------------------")
+songIndex = 0
+let prevButton = -1
+notes = [
 262,
 294,
 330,
@@ -89,15 +114,42 @@ let notes = [
 494,
 523
 ]
+song = [
+0,
+1,
+2,
+3,
+4,
+4,
+5,
+5,
+5,
+5,
+4,
+3,
+3,
+3,
+3,
+2,
+2,
+1,
+1,
+1,
+1,
+0
+]
+lightLed(song[songIndex])
 basic.forever(function () {
     currentButton = determineButton(pins.analogReadPin(AnalogPin.P0))
-    serial.writeLine("" + (currentButton))
-    if (currentButton < 0) {
-        music.stopAllSounds()
-        turnOffLed(prevButton)
+    if (currentButton >= 0) {
+        if (prevButton == -1) {
+            onButtonPressed(currentButton)
+            prevButton = currentButton
+        }
     } else {
-        music.ringTone(notes[currentButton])
-        prevButton = currentButton
-        lightLed(currentButton)
+        if (prevButton > -1) {
+            onButtonReleased(prevButton)
+            prevButton = currentButton
+        }
     }
 })
