@@ -1,37 +1,83 @@
 function determineButton (num: number) {
     if (num > 40 && num < 80) {
-        return 8
-    }
-    if (num > 90 && num < 105) {
         return 7
     }
-    if (num > 120 && num < 140) {
+    if (num > 90 && num < 105) {
         return 6
     }
-    if (num > 150 && num < 180) {
+    if (num > 120 && num < 140) {
         return 5
     }
-    if (num > 190 && num < 220) {
+    if (num > 150 && num < 180) {
         return 4
     }
-    if (num > 260 && num < 320) {
+    if (num > 190 && num < 220) {
         return 3
     }
-    if (num > 380 && num < 500) {
+    if (num > 260 && num < 320) {
         return 2
     }
-    if (num > 800) {
+    if (num > 380 && num < 500) {
         return 1
+    }
+    if (num > 800) {
+        return 0
     }
     return -1
 }
-basic.forever(function () {
-    serial.writeLine("" + (pins.analogReadPin(AnalogPin.P0)))
-    if (pins.analogReadPin(AnalogPin.P0) > 500) {
+function turnOffLeds () {
+    pins.analogWritePin(AnalogPin.P16, 0)
+    pins.analogWritePin(AnalogPin.P15, 0)
+    pins.analogWritePin(AnalogPin.P14, 0)
+    pins.analogWritePin(AnalogPin.P13, 0)
+    pins.analogWritePin(AnalogPin.P9, 0)
+    pins.analogWritePin(AnalogPin.P8, 0)
+    pins.analogWritePin(AnalogPin.P2, 0)
+    pins.analogWritePin(AnalogPin.P1, 0)
+}
+function lightLed (num: number) {
+    if (num == 0) {
         pins.analogWritePin(AnalogPin.P16, 1023)
-        music.ringTone(262)
-    } else {
+    }
+    if (num == 1) {
+        pins.analogWritePin(AnalogPin.P15, 1023)
+    }
+    if (num == 2) {
+        pins.analogWritePin(AnalogPin.P14, 1023)
+    }
+    if (num == 3) {
+        pins.analogWritePin(AnalogPin.P13, 1023)
+    }
+    if (num == 4) {
+        pins.analogWritePin(AnalogPin.P9, 1023)
+    }
+    if (num == 5) {
+        pins.analogWritePin(AnalogPin.P8, 1023)
+    }
+    if (num == 6) {
+        pins.analogWritePin(AnalogPin.P2, 1023)
+    }
+    if (num == 7) {
+        pins.analogWritePin(AnalogPin.P1, 1023)
+    }
+}
+let list = [
+262,
+294,
+330,
+349,
+392,
+440,
+494,
+523
+]
+basic.forever(function () {
+    serial.writeLine("" + (determineButton(pins.analogReadPin(AnalogPin.P0))))
+    if (determineButton(pins.analogReadPin(AnalogPin.P0)) < 0) {
         music.stopAllSounds()
-        pins.analogWritePin(AnalogPin.P16, 0)
+        turnOffLeds()
+    } else {
+        music.ringTone(list[determineButton(pins.analogReadPin(AnalogPin.P0))])
+        lightLed(determineButton(pins.analogReadPin(AnalogPin.P0)))
     }
 })
