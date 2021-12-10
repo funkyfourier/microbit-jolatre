@@ -1,3 +1,29 @@
+function turnOffLed (num: number) {
+    if (num == 0) {
+        pins.analogWritePin(AnalogPin.P16, 0)
+    }
+    if (num == 1) {
+        pins.analogWritePin(AnalogPin.P15, 0)
+    }
+    if (num == 2) {
+        pins.analogWritePin(AnalogPin.P14, 0)
+    }
+    if (num == 3) {
+        pins.analogWritePin(AnalogPin.P13, 0)
+    }
+    if (num == 4) {
+        pins.analogWritePin(AnalogPin.P9, 0)
+    }
+    if (num == 5) {
+        pins.analogWritePin(AnalogPin.P8, 0)
+    }
+    if (num == 6) {
+        pins.analogWritePin(AnalogPin.P2, 0)
+    }
+    if (num == 7) {
+        pins.analogWritePin(AnalogPin.P1, 0)
+    }
+}
 function determineButton (num: number) {
     if (num > 40 && num < 80) {
         return 7
@@ -25,16 +51,6 @@ function determineButton (num: number) {
     }
     return -1
 }
-function turnOffLeds () {
-    pins.analogWritePin(AnalogPin.P16, 0)
-    pins.analogWritePin(AnalogPin.P15, 0)
-    pins.analogWritePin(AnalogPin.P14, 0)
-    pins.analogWritePin(AnalogPin.P13, 0)
-    pins.analogWritePin(AnalogPin.P9, 0)
-    pins.analogWritePin(AnalogPin.P8, 0)
-    pins.analogWritePin(AnalogPin.P2, 0)
-    pins.analogWritePin(AnalogPin.P1, 0)
-}
 function lightLed (num: number) {
     if (num == 0) {
         pins.analogWritePin(AnalogPin.P16, 1023)
@@ -61,7 +77,9 @@ function lightLed (num: number) {
         pins.analogWritePin(AnalogPin.P1, 1023)
     }
 }
-let list = [
+let prevButton = 0
+let currentButton = 0
+let notes = [
 262,
 294,
 330,
@@ -72,12 +90,14 @@ let list = [
 523
 ]
 basic.forever(function () {
-    serial.writeLine("" + (determineButton(pins.analogReadPin(AnalogPin.P0))))
-    if (determineButton(pins.analogReadPin(AnalogPin.P0)) < 0) {
+    currentButton = determineButton(pins.analogReadPin(AnalogPin.P0))
+    serial.writeLine("" + (currentButton))
+    if (currentButton < 0) {
         music.stopAllSounds()
-        turnOffLeds()
+        turnOffLed(prevButton)
     } else {
-        music.ringTone(list[determineButton(pins.analogReadPin(AnalogPin.P0))])
-        lightLed(determineButton(pins.analogReadPin(AnalogPin.P0)))
+        music.ringTone(notes[currentButton])
+        prevButton = currentButton
+        lightLed(currentButton)
     }
 })
