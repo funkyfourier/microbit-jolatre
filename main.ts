@@ -26,8 +26,6 @@ function turnOffLed (num: number) {
 }
 function onButtonPressed (button: number) {
     serial.writeLine("Pressed " + convertToText(button))
-    music.stopAllSounds()
-    music.setBuiltInSpeakerEnabled(true)
     music.ringTone(notes[button])
     if (button == song[songIndex]) {
         turnOffLed(song[songIndex])
@@ -62,7 +60,7 @@ function determineButton (num: number) {
 }
 function onButtonReleased (button: number) {
     serial.writeLine("Released " + convertToText(button))
-    music.stopAllSounds()
+    music.ringTone(0)
     if (button == song[songIndex]) {
         songIndex += 1
         if (songIndex >= song.length - 0) {
@@ -102,6 +100,8 @@ let song: number[] = []
 let notes: number[] = []
 let songIndex = 0
 serial.writeLine("---------------------")
+music.setBuiltInSpeakerEnabled(true)
+music.setVolume(255)
 songIndex = 0
 let prevButton = -1
 notes = [
@@ -140,6 +140,7 @@ song = [
 ]
 lightLed(song[songIndex])
 basic.forever(function () {
+    serial.writeLine("" + (pins.analogReadPin(AnalogPin.P0)))
     currentButton = determineButton(pins.analogReadPin(AnalogPin.P0))
     if (currentButton >= 0) {
         if (prevButton == -1) {
