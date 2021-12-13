@@ -53,7 +53,7 @@ function determineButton (num: number) {
     if (num > 500 && num < 530) {
         return 1
     }
-    if (num > 88 && num > 95) {
+    if (num > 88 && num < 98) {
         return 0
     }
     return -1
