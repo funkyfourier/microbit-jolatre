@@ -1,27 +1,27 @@
 function turnOffLed (num: number) {
     if (num == 0) {
-        pins.analogWritePin(AnalogPin.P9, 0)
+        pins.analogWritePin(AnalogPin.P1, 0)
     }
     if (num == 1) {
-        pins.analogWritePin(AnalogPin.P16, 0)
-    }
-    if (num == 2) {
         pins.analogWritePin(AnalogPin.P2, 0)
     }
+    if (num == 2) {
+        pins.analogWritePin(AnalogPin.P8, 0)
+    }
     if (num == 3) {
-        pins.analogWritePin(AnalogPin.P14, 0)
+        pins.analogWritePin(AnalogPin.P9, 0)
     }
     if (num == 4) {
         pins.analogWritePin(AnalogPin.P13, 0)
     }
     if (num == 5) {
-        pins.analogWritePin(AnalogPin.P15, 0)
+        pins.analogWritePin(AnalogPin.P14, 0)
     }
     if (num == 6) {
-        pins.analogWritePin(AnalogPin.P8, 0)
+        pins.analogWritePin(AnalogPin.P15, 0)
     }
     if (num == 7) {
-        pins.analogWritePin(AnalogPin.P1, 0)
+        pins.analogWritePin(AnalogPin.P16, 0)
     }
 }
 function onButtonPressed (button: number) {
@@ -32,28 +32,28 @@ function onButtonPressed (button: number) {
     }
 }
 function determineButton (num: number) {
-    if (num > 960 && num < 1000) {
+    if (num > 1005) {
         return 7
     }
-    if (num > 1005) {
+    if (num > 990 && num < 1000) {
         return 6
     }
-    if (num > 910 && num < 950) {
+    if (num > 925 && num < 940) {
         return 5
     }
-    if (num > 840 && num < 880) {
+    if (num > 850 && num < 860) {
         return 4
     }
-    if (num > 4 && num < 15) {
+    if (num > 675 && num < 683) {
         return 3
     }
-    if (num > 650 && num < 690) {
+    if (num > 510 && num < 515) {
         return 2
     }
-    if (num > 500 && num < 530) {
+    if (num > 89 && num < 93) {
         return 1
     }
-    if (num > 88 && num < 98) {
+    if (num > 2 && num < 11) {
         return 0
     }
     return -1
@@ -71,28 +71,28 @@ function onButtonReleased (button: number) {
 }
 function lightLed (num: number) {
     if (num == 0) {
-        pins.analogWritePin(AnalogPin.P9, 1023)
+        pins.analogWritePin(AnalogPin.P1, 1023)
     }
     if (num == 1) {
-        pins.analogWritePin(AnalogPin.P16, 1023)
-    }
-    if (num == 2) {
         pins.analogWritePin(AnalogPin.P2, 1023)
     }
+    if (num == 2) {
+        pins.analogWritePin(AnalogPin.P8, 1023)
+    }
     if (num == 3) {
-        pins.analogWritePin(AnalogPin.P14, 1023)
+        pins.analogWritePin(AnalogPin.P9, 1023)
     }
     if (num == 4) {
         pins.analogWritePin(AnalogPin.P13, 1023)
     }
     if (num == 5) {
-        pins.analogWritePin(AnalogPin.P15, 1023)
+        pins.analogWritePin(AnalogPin.P14, 1023)
     }
     if (num == 6) {
-        pins.analogWritePin(AnalogPin.P8, 1023)
+        pins.analogWritePin(AnalogPin.P15, 1023)
     }
     if (num == 7) {
-        pins.analogWritePin(AnalogPin.P1, 1023)
+        pins.analogWritePin(AnalogPin.P16, 1023)
     }
 }
 let currentButton = 0
